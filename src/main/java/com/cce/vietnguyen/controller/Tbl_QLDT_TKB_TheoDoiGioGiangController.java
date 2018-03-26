@@ -91,9 +91,10 @@ return new ResponseEntity(HttpStatus.BAD_REQUEST);
 @RequestMapping(value="/tbl_qldt_tkb_theodoigiogiang/{id}", method = RequestMethod.GET)
 public ResponseEntity getObjById(@PathVariable("id") Long id, HttpServletRequest request
 ,@AuthenticationPrincipal Tbl_TaiKhoan user) {
-if(!genericRepository.checkRight(user, "tbl_qldt_tkb_theodoigiogiang", "xem")){
-return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-}
+    //advh
+//if(!genericRepository.checkRight(user, "tbl_qldt_tkb_theodoigiogiang", "xem")){
+//return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//}
 Tbl_QLDT_TKB_TheoDoiGioGiang obj = (Tbl_QLDT_TKB_TheoDoiGioGiang) genericDAO.get(Tbl_QLDT_TKB_TheoDoiGioGiang .class, id);
 return new ResponseEntity(obj, HttpStatus.OK);
 }

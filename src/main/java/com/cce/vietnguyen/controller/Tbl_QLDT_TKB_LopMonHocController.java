@@ -110,9 +110,10 @@ return new ResponseEntity(HttpStatus.BAD_REQUEST);
 @RequestMapping(value="/tbl_qldt_tkb_lopmonhoc/{id}", method = RequestMethod.GET)
 public ResponseEntity getObjById(@PathVariable("id") Long id, HttpServletRequest request
 ,@AuthenticationPrincipal Tbl_TaiKhoan user) {
-if(!genericRepository.checkRight(user, "tbl_qldt_tkb_lopmonhoc", "xem")){
-return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-}
+    //advh
+//if(!genericRepository.checkRight(user, "tbl_qldt_tkb_lopmonhoc", "xem")){
+//return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//}
 Tbl_QLDT_TKB_LopMonHoc obj = (Tbl_QLDT_TKB_LopMonHoc) genericDAO.get(Tbl_QLDT_TKB_LopMonHoc .class, id);
 return new ResponseEntity(obj, HttpStatus.OK);
 }
