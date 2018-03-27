@@ -130,11 +130,11 @@ public class CommonController {
 			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
 			HttpServletRequest request,
 			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		//advh
+		
 //		if (user == null || user.getId().equals(new Long(0))) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
-                //advh
+//
 //		if (!genericRepository.checkRight(user, spName, "xem")) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
@@ -173,13 +173,13 @@ public class CommonController {
 			HttpServletRequest request,
 			@AuthenticationPrincipal Tbl_TaiKhoan user) {
 		
-		if (user == null || user.getId().equals(new Long(0))) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
-
-		if (!genericRepository.checkRight(user, spName, "xem")) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
+//		if (user == null || user.getId().equals(new Long(0))) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//		}
+//
+//		if (!genericRepository.checkRight(user, spName, "xem")) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//		}
 		
 
 		String sql = "EXEC  " + spName + " ";
@@ -201,6 +201,9 @@ public class CommonController {
 
 		}
 		sql += " ";
+		
+		if(pageSize == null) pageSize = -1;
+		if(page == null || page == 0) page = 1;
 		
 		List<Map<String, Object>> results = genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page);
 
@@ -251,6 +254,8 @@ public class CommonController {
 		sql += " ";
 		
 
+		if(pageSize == null) pageSize = -1;
+		if(page == null || page == 0) page = 1;
 		return new ResponseEntity(
 				genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page),
 				HttpStatus.OK
