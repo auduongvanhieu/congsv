@@ -94,6 +94,7 @@ public class Tbl_QLDT_TKB_LopMonHoc_HocVienController {
         Tbl_QLDT_TKB_LopMonHoc_HocVien obj = (Tbl_QLDT_TKB_LopMonHoc_HocVien) genericDAO.get(Tbl_QLDT_TKB_LopMonHoc_HocVien.class, id);
         return new ResponseEntity(obj, HttpStatus.OK);
     }
+    
 
     @RequestMapping(value = "/tbl_qldt_tkb_lopmonhoc_hocvien", method = RequestMethod.POST)
     public ResponseEntity createObj(@RequestBody Tbl_QLDT_TKB_LopMonHoc_HocVien obj,
