@@ -130,14 +130,14 @@ public class CommonController {
 			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
 			HttpServletRequest request,
 			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		
-		if (user == null || user.getId().equals(new Long(0))) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
-
-		if (!genericRepository.checkRight(user, spName, "xem")) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
+		//advh
+//		if (user == null || user.getId().equals(new Long(0))) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//		}
+                //advh
+//		if (!genericRepository.checkRight(user, spName, "xem")) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//		}
 		
 		List<StoreParameter> params = new ArrayList<>();
 		for (MyFilter f : filters) {
