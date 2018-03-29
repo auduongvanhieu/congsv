@@ -2,7 +2,6 @@ package com.cce.vietnguyen.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,11 +55,11 @@ public class Tbl_QLDT_TKB_LopMonHoc_HocVienController {
              @RequestParam(required = false) Integer page,
              HttpServletRequest request,
              @AuthenticationPrincipal Tbl_TaiKhoan user) {
-        if (!genericRepository.checkRight(user, "tbl_qldt_tkb_lopmonhoc_hocvien", "xem")) {
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-        }
+//        if (!genericRepository.checkRight(user, "tbl_qldt_tkb_lopmonhoc_hocvien", "xem")) {
+//            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//        }
         try {
-            List<MyFilter> cons = new ArrayList<MyFilter>();
+            ArrayList<MyFilter> cons = new ArrayList<MyFilter>();
             cons = buildFilter(request);
             {
                 MyFilter con = new MyFilter();
@@ -74,7 +73,7 @@ public class Tbl_QLDT_TKB_LopMonHoc_HocVienController {
             } else if (pageSize == -1) {
                 pageSize = 0;
             }
-            if (page == 0) {
+            if (page == null || page == 0 ) {
                 page = 1;
             }
             return new ResponseEntity(genericDAO.findByCondition(Tbl_QLDT_TKB_LopMonHoc_HocVien.class, cons, pageSize, page), HttpStatus.OK);
@@ -148,8 +147,8 @@ public class Tbl_QLDT_TKB_LopMonHoc_HocVienController {
         return new ResponseEntity(genericDAO.countByCondition(Tbl_QLDT_TKB_LopMonHoc_HocVien.class, cons), HttpStatus.OK);
     }
 
-    private List<MyFilter> buildFilter(HttpServletRequest request) {
-        List<MyFilter> cons = new ArrayList<MyFilter>();
+    private ArrayList<MyFilter> buildFilter(HttpServletRequest request) {
+        ArrayList<MyFilter> cons = new ArrayList<MyFilter>();
 //variable
         try {
             if (request.getParameter("id") != null) {

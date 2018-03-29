@@ -1,4 +1,3 @@
-
 package com.cce.vietnguyen.controller.core;
 
 import java.util.ArrayList;
@@ -26,111 +25,107 @@ import com.cce.vietnguyen.repository.GenericRepository;
 import com.cce.vietnguyen.repository.MyFilter;
 import com.cce.vietnguyen.repository.StoreParameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.Console;
 
 @RestController
 public class CommonController {
-	@Autowired
-	private GenericDao genericDAO;
-	@Autowired
-	private GenericRepository genericRepository;
 
-	@RequestMapping(value = "/common/autocomplete", method = RequestMethod.GET)
-	public List autocomplete(@RequestParam(required = true) String pack, @RequestParam(required = true) String tbl,
-			@RequestParam(required = false) String q) {
+    @Autowired
+    private GenericDao genericDAO;
+    @Autowired
+    private GenericRepository genericRepository;
 
-		String hql = "select t from " + StringUtils.capitalize(tbl).replaceAll(" ", "") + " t ";
-		hql += " where 1=1 ";
-		try {
-			Class clazz = Class.forName(pack + tbl);
-			try {
+    @RequestMapping(value = "/common/autocomplete", method = RequestMethod.GET)
+    public List autocomplete(@RequestParam(required = true) String pack, @RequestParam(required = true) String tbl,
+            @RequestParam(required = false) String q) {
 
-				if (clazz.getDeclaredField("code") != null && clazz.getDeclaredField("name") != null) {
-					hql += " and (t.code like :key or t.name like :key )";
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			try {
-				if (clazz.getDeclaredField("ma") != null && clazz.getDeclaredField("ten") != null) {
-					hql += " and (t.ma like :key or t.ten like :key )";
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+        String hql = "select t from " + StringUtils.capitalize(tbl).replaceAll(" ", "") + " t ";
+        hql += " where 1=1 ";
+        try {
+            Class clazz = Class.forName(pack + tbl);
+            try {
 
-		Map<String, Object> params = new HashMap<>();
-		params.put("key", "%" + q + "%");
+                if (clazz.getDeclaredField("code") != null && clazz.getDeclaredField("name") != null) {
+                    hql += " and (t.code like :key or t.name like :key )";
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            try {
+                if (clazz.getDeclaredField("ma") != null && clazz.getDeclaredField("ten") != null) {
+                    hql += " and (t.ma like :key or t.ten like :key )";
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
 
-		return genericDAO.queryHQL(hql, params);
-	}
+        Map<String, Object> params = new HashMap<>();
+        params.put("key", "%" + q + "%");
 
-	@RequestMapping(value = "/common/checkright", method = RequestMethod.GET)
-	public Boolean checkRight(
-			  @RequestParam(required = false) String objStr
-			, @RequestParam(required = false) String actionStr
+        return genericDAO.queryHQL(hql, params);
+    }
 
-			, @AuthenticationPrincipal Tbl_TaiKhoan user) {
+    @RequestMapping(value = "/common/checkright", method = RequestMethod.GET)
+    public Boolean checkRight(
+            @RequestParam(required = false) String objStr,
+             @RequestParam(required = false) String actionStr,
+             @AuthenticationPrincipal Tbl_TaiKhoan user) {
 
-			return genericRepository.checkRight(user, objStr, actionStr);
-	
-		
-	}
-	
+        return genericRepository.checkRight(user, objStr, actionStr);
 
+    }
 
-	@RequestMapping(value = "/common/vw/{name}", method = RequestMethod.POST)
-	public ResponseEntity view(@PathVariable("name") String viewName, @RequestParam(required = false) Integer pageSize,
-			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
-			HttpServletRequest request,
-			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		
-		
-		if (!genericRepository.checkRight(user, viewName, "xem")) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
+    @RequestMapping(value = "/common/vw/{name}", method = RequestMethod.POST)
+    public ResponseEntity view(@PathVariable("name") String viewName, @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
+            HttpServletRequest request,
+            @AuthenticationPrincipal Tbl_TaiKhoan user) {
 
-		String sql = "select t.*  from " + StringUtils.capitalize(viewName).replaceAll(" ", "") + " t ";
-		sql += " where 1=1 ";
+        if (!genericRepository.checkRight(user, viewName, "xem")) {
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
 
-		Map<String, Object> params = new HashMap<>();
-		int i = 0;
-		for (MyFilter f : filters) {
-			if (!f.getOperator().toLowerCase().equals("order")) {
-				i++;
-				sql += " AND " + f.getCol() + " ";
-				sql += " " + f.getOperator() + " ";
-				sql += " :" + f.getCol() + i + " ";
-				params.put(f.getCol() + i, "" + f.getValue1() + "");
-			}
-		}
-		sql += " ORDER BY 1 ";
-		i = 0;
-		for (MyFilter f : filters) {
-			if (f.getOperator().toLowerCase().equals("order")) {
-				i++;
-				sql += " ," + f.getCol() + " ";
-				sql += " " + f.getValue1() + " ";
-			}
-		}
+        String sql = "select t.*  from " + StringUtils.capitalize(viewName).replaceAll(" ", "") + " t ";
+        sql += " where 1=1 ";
 
-		return new ResponseEntity(
-				genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page),
-				HttpStatus.OK
-		);
-	}
-	
+        Map<String, Object> params = new HashMap<>();
+        int i = 0;
+        for (MyFilter f : filters) {
+            if (!f.getOperator().toLowerCase().equals("order")) {
+                i++;
+                sql += " AND " + f.getCol() + " ";
+                sql += " " + f.getOperator() + " ";
+                sql += " :" + f.getCol() + i + " ";
+                params.put(f.getCol() + i, "" + f.getValue1() + "");
+            }
+        }
+        sql += " ORDER BY 1 ";
+        i = 0;
+        for (MyFilter f : filters) {
+            if (f.getOperator().toLowerCase().equals("order")) {
+                i++;
+                sql += " ," + f.getCol() + " ";
+                sql += " " + f.getValue1() + " ";
+            }
+        }
 
-	@RequestMapping(value = "/common/sp/{name}", method = RequestMethod.POST)
-	public ResponseEntity callSP(
-			@PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
-			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
-			HttpServletRequest request,
-			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		
+        return new ResponseEntity(
+                genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page),
+                HttpStatus.OK
+        );
+    }
+
+    @RequestMapping(value = "/common/sp/{name}", method = RequestMethod.POST)
+    public ResponseEntity callSP(
+            @PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
+            HttpServletRequest request,
+            @AuthenticationPrincipal Tbl_TaiKhoan user) {
+
 //		if (user == null || user.getId().equals(new Long(0))) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
@@ -138,41 +133,39 @@ public class CommonController {
 //		if (!genericRepository.checkRight(user, spName, "xem")) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
-		
-		List<StoreParameter> params = new ArrayList<>();
-		for (MyFilter f : filters) {
-			{
-				
-				try {
-					StoreParameter p = new StoreParameter();
-					p.setName(f.getCol());
-					p.setVal(f.getValue1().toString());
-					p.setClazz(String.class);
+        List<StoreParameter> params = new ArrayList<>();
+        for (MyFilter f : filters) {
+            {
 
-					params.add(p);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-				
-			}
-		}
+                try {
+                    StoreParameter p = new StoreParameter();
+                    p.setName(f.getCol());
+                    p.setVal(f.getValue1().toString());
+                    p.setClazz(String.class);
 
-		
-		return new ResponseEntity(
-				genericRepository.callStoreProcedure(spName, params, null),
-				HttpStatus.OK
-		);
+                    params.add(p);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
 
-	}
+            }
+        }
 
-	@RequestMapping(value = "/common/sp/micro/{name}", method = RequestMethod.POST)
-	public ResponseEntity call_SP_Alias(
-			@PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
-			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
-			HttpServletRequest request,
-			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		
+        return new ResponseEntity(
+                genericRepository.callStoreProcedure(spName, params, null),
+                HttpStatus.OK
+        );
+
+    }
+
+    @RequestMapping(value = "/common/sp/micro/{name}", method = RequestMethod.POST)
+    public ResponseEntity call_SP_Alias(
+            @PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
+            HttpServletRequest request,
+            @AuthenticationPrincipal Tbl_TaiKhoan user) {
+
 //		if (user == null || user.getId().equals(new Long(0))) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
@@ -180,91 +173,88 @@ public class CommonController {
 //		if (!genericRepository.checkRight(user, spName, "xem")) {
 //			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //		}
-		
+        String sql = "EXEC  " + spName + " ";
 
-		String sql = "EXEC  " + spName + " ";
+        Map<String, Object> params = new HashMap<>();
+        int i = 0;
+        for (MyFilter f : filters) {
+            {
+                i++;
 
-		Map<String, Object> params = new HashMap<>();
-		int i = 0;
-		for (MyFilter f : filters) {
-			{
-				i++;
-				
-				sql += "@" +f.getCol() +" = :" + f.getCol() + " ";
-				if(i < filters.size()){
-					sql += ", ";
-				}
+                sql += "@" + f.getCol() + " = :" + f.getCol() + " ";
+                if (i < filters.size()) {
+                    sql += ", ";
+                }
 
-				params.put(f.getCol(), "" + f.getValue1() + "");
-			}
-			
+                params.put(f.getCol(), "" + f.getValue1() + "");
+            }
 
-		}
-		sql += " ";
-		
-		if(pageSize == null) pageSize = -1;
-		if(page == null || page == 0) page = 1;
-		
-		List<Map<String, Object>> results = genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page);
+        }
+        sql += " ";
+        
+        
+        
+        if (pageSize == null) {
+            pageSize = -1;
+        }
+        if (page == null || page == 0) {
+            page = 1;
+        }
 
-		return new ResponseEntity(
-				results,
-				HttpStatus.OK
-		);
+        List<Map<String, Object>> results = genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page);
+        
+        return new ResponseEntity(
+                results,
+                HttpStatus.OK
+        );
 
-		
+    }
 
-	}
+    @RequestMapping(value = "/common/sp/my/{name}", method = RequestMethod.POST)
+    public ResponseEntity call_SP_MySQL(
+            @PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
+            HttpServletRequest request,
+            @AuthenticationPrincipal Tbl_TaiKhoan user) {
 
+        if (user == null || user.getId().equals(new Long(0))) {
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
 
-	@RequestMapping(value = "/common/sp/my/{name}", method = RequestMethod.POST)
-	public ResponseEntity call_SP_MySQL(
-			@PathVariable("name") String spName, @RequestParam(required = false) Integer pageSize,
-			@RequestParam(required = false) Integer page, @RequestBody List<MyFilter> filters,
-			HttpServletRequest request,
-			@AuthenticationPrincipal Tbl_TaiKhoan user) {
-		
-		if (user == null || user.getId().equals(new Long(0))) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
+        if (!genericRepository.checkRight(user, spName, "xem")) {
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
 
-		if (!genericRepository.checkRight(user, spName, "xem")) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
-		
+        String sql = "EXEC  " + spName + " ";
 
-		String sql = "EXEC  " + spName + " ";
+        Map<String, Object> params = new HashMap<>();
+        int i = 0;
+        for (MyFilter f : filters) {
+            {
+                i++;
 
-		Map<String, Object> params = new HashMap<>();
-		int i = 0;
-		for (MyFilter f : filters) {
-			{
-				i++;
-				
-				sql += "@" +f.getCol() +" = :" + f.getCol() + " ";
-				if(i < filters.size()){
-					sql += ", ";
-				}
+                sql += "@" + f.getCol() + " = :" + f.getCol() + " ";
+                if (i < filters.size()) {
+                    sql += ", ";
+                }
 
-				params.put(f.getCol(), "" + f.getValue1() + "");
-			}
-			
+                params.put(f.getCol(), "" + f.getValue1() + "");
+            }
 
-		}
-		sql += " ";
-		
+        }
+        sql += " ";
 
-		if(pageSize == null) pageSize = -1;
-		if(page == null || page == 0) page = 1;
-		return new ResponseEntity(
-				genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page),
-				HttpStatus.OK
-		);
+        if (pageSize == null) {
+            pageSize = -1;
+        }
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        return new ResponseEntity(
+                genericRepository.querySQL_AliasTransformer(sql, params, pageSize, page),
+                HttpStatus.OK
+        );
 
-		
-
-	}
-
-
+    }
 
 }
