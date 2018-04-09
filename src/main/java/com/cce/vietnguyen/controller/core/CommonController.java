@@ -166,13 +166,13 @@ public class CommonController {
             HttpServletRequest request,
             @AuthenticationPrincipal Tbl_TaiKhoan user) {
 
-//		if (user == null || user.getId().equals(new Long(0))) {
-//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-//		}
-//
-//		if (!genericRepository.checkRight(user, spName, "xem")) {
-//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-//		}
+		if (user == null || user.getId().equals(new Long(0))) {
+			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		if (!genericRepository.checkRight(user, spName, "xem")) {
+			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+		}
         String sql = "EXEC  " + spName + " ";
 
         Map<String, Object> params = new HashMap<>();
