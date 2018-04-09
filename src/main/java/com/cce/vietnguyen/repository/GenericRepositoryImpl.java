@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cce.vietnguyen.model.core.Tbl_Quyen_ChiTiet;
 import com.cce.vietnguyen.model.core.Tbl_TaiKhoan;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 
 @Repository
 public class GenericRepositoryImpl implements GenericRepository {
