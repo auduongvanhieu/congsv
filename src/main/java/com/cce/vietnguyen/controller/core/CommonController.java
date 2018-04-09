@@ -170,9 +170,9 @@ public class CommonController {
 			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 		}
 
-		if (!genericRepository.checkRight(user, spName, "xem")) {
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
+//		if (!genericRepository.checkRight(user, spName, "xem")) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//		}
         String sql = "EXEC  " + spName + " ";
 
         Map<String, Object> params = new HashMap<>();
