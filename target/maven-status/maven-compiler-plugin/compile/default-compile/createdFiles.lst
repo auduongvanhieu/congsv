@@ -132,6 +132,7 @@ com\cce\vietnguyen\model\Tbl_QLDT_DM_TietHoc.class
 com\cce\vietnguyen\model\Tbl_QLDT_QLHV_DonXinChuyenTruong_ChuyenNganh.class
 com\cce\vietnguyen\controller\Tbl_QLDT_QLHV_PhieuLyLichController.class
 com\cce\vietnguyen\controller\Tbl_QLDT_CTDT_KhoaController.class
+com\cce\vietnguyen\controller\core\Tbl_Quyen_NhomQuyenController.class
 com\cce\vietnguyen\model\core\Tbl_Menu.class
 com\cce\vietnguyen\controller\core\Tbl_Quyen_MenuController.class
 com\cce\vietnguyen\model\Tbl_QLDT_TS_HoSoXetTuyen.class
@@ -166,6 +167,7 @@ com\cce\vietnguyen\config\CustomUserDetailsService$1.class
 com\cce\vietnguyen\controller\Tbl_QLDT_DM_CoSoController.class
 com\cce\vietnguyen\model\Tbl_QLDT_HP_QuiDinhHocPhi.class
 com\cce\vietnguyen\controller\Tbl_QLDT_TN_SoCapBangTotNghiepController.class
+com\cce\vietnguyen\controller\Tbl_QLDT_TKB_LopMonHoc_HocVienController.class
 com\cce\vietnguyen\model\Tbl_QLDT_CTDT_Nganh.class
 com\cce\vietnguyen\controller\Tbl_QLDT_DKMH_QuyDinhDKCoSoController.class
 com\cce\vietnguyen\model\Tbl_QLDT_CTDT_NhomTuChon.class
@@ -193,6 +195,7 @@ com\cce\vietnguyen\controller\Tbl_QLDT_TKB_TheoDoiGioGiangController.class
 com\cce\vietnguyen\model\Tbl_QLDT_DM_TonGiao.class
 com\cce\vietnguyen\controller\Tbl_QLDT_CTDT_MonHocTienQuyetController.class
 com\cce\vietnguyen\model\Tbl_QLDT_DKMH_LogMail_BK.class
+com\cce\vietnguyen\controller\core\CommonController.class
 com\cce\vietnguyen\controller\Tbl_QLDT_TKB_ThoiKhoaBieuChinhThucController.class
 com\cce\vietnguyen\model\Tbl_QLDT_TKB_ThoiKhoaBieuChinhThuc.class
 com\cce\vietnguyen\controller\Tbl_QLDT_LichKiemTraGKController.class
