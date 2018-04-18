@@ -141,6 +141,7 @@ com\cce\vietnguyen\controller\Tbl_QLDT_CTDT_BoMonController.class
 com\cce\vietnguyen\model\Tbl_QLDT_DM_LoaiChungChi.class
 com\cce\vietnguyen\model\Tbl_QLDT_QLHV_HocVien_ChungChi.class
 com\cce\vietnguyen\repository\StoreParameter.class
+com\cce\vietnguyen\model\Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class
 com\cce\vietnguyen\model\Tbl_QLDT_QLHV_TaiKhoan.class
 com\cce\vietnguyen\model\Tbl_qldt_ts_quydinhxettuyen.class
 com\cce\vietnguyen\controller\Tbl_QLDT_HP_HocVien_HocPhi_MonHocController.class
@@ -234,6 +235,7 @@ com\cce\vietnguyen\config\WebInitializer.class
 com\cce\vietnguyen\model\core\Tbl_DBTable.class
 com\cce\vietnguyen\model\Tbl_QLDT_ThongBao_ChiNhanh.class
 com\cce\vietnguyen\controller\core\Tbl_ConfigController.class
+com\cce\vietnguyen\controller\Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController.class
 com\cce\vietnguyen\controller\Tbl_QLDT_TS_ThongBaoTuyenSinhController.class
 com\cce\vietnguyen\model\Tbl_QLDT_SoYeuLyLich.class
 com\cce\vietnguyen\controller\Tbl_QLDT_TS_BienNhanHoSoController.class

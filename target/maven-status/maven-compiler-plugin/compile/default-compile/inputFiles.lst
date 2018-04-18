@@ -142,6 +142,7 @@ D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_QLDT_QLDiem_DonXinChuyenDie
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_TKB_LopMonHocDuKienController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_QLDT_LichThi_HocVien.java
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_QLHV_QuyetDinhKhenThuongController.java
+D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_LichKiemTraGKController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_TKB_ThoiKhoaBieuDuKienController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_QLDT_HocVien_DangKyMonHoc.java
@@ -232,6 +233,7 @@ D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_QLDT_CTDT_KhoiNganh_MonHoc.
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\core\Tbl_canboController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_DM_PhongController.java
 D:\congsv\src\main\java\com\cce\vietnguyen\controller\Tbl_QLDT_QLHV_HocVien_KetQuaHocTapController.java
+D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.java
 D:\congsv\src\main\java\com\cce\vietnguyen\model\core\Tbl_Log.java
 D:\congsv\src\main\java\com\cce\vietnguyen\model\Tbl_qldt_ts_loaidanhmuc.java
 D:\congsv\src\main\java\com\cce\vietnguyen\model\core\Tbl_HTMLReport_Param.java
