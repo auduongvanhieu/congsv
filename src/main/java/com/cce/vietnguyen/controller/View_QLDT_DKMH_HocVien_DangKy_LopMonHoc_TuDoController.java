@@ -5,7 +5,7 @@
  */
 package com.cce.vietnguyen.controller;
 
-import com.cce.vietnguyen.model.View_QLDT_DKMH_HocVien_DangKy_LopMonHoc;
+import com.cce.vietnguyen.model.View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +29,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 
 @RestController
-public class View_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
+public class View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDoController {
     @Autowired
     private GenericDao genericDAO;
     @Autowired
     private GenericRepository genericRepository;
     
-    @RequestMapping(value = "/view_qldt_dkmh_hocvien_dangky_lopmonhoc", method = RequestMethod.GET)
+    @RequestMapping(value = "/view_qldt_dkmh_hocvien_dangky_lopmonhoc_tudo", method = RequestMethod.GET)
     public List getAll() {
         List<MyFilter> cons = new ArrayList<MyFilter>();
         {
@@ -45,10 +45,10 @@ public class View_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             con.setCol("id");
             cons.add(con);
         }
-        return genericDAO.findByCondition(View_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons, 20, 1);
+        return genericDAO.findByCondition(View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDo.class, cons, 20, 1);
     }
     
-    @RequestMapping(value = "/view_qldt_dkmh_hocvien_dangky_lopmonhoc/find", method = RequestMethod.GET)
+    @RequestMapping(value = "/view_qldt_dkmh_hocvien_dangky_lopmonhoc_tudo/find", method = RequestMethod.GET)
     public ResponseEntity find(@RequestParam(required = false) Integer pageSize,
              @RequestParam(required = false) Integer page,
              HttpServletRequest request,
@@ -76,7 +76,7 @@ public class View_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             if (page == null ||page == 0) {
                 page = 1;
             }
-            return new ResponseEntity(genericDAO.findByCondition(View_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons, pageSize, page), HttpStatus.OK);
+            return new ResponseEntity(genericDAO.findByCondition(View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDo.class, cons, pageSize, page), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -97,15 +97,48 @@ public class View_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             }
         } catch (Exception e) {
         }
-        
-        if (request.getParameter("hocVienID") != null) {
+        if (request.getParameter("lopMonHocId") != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("lopMonHocId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getParameter("lopMonHocId").toString()));
+                cons.add(con);
+        }
+        if (request.getParameter("monHocId") != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("monHocId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getParameter("monHocId").toString()));
+                cons.add(con);
+        }
+        if (request.getParameter("maMonHoc") != null) {
             MyFilter con = new MyFilter();
-            con.setCol("hocVienID");
-            con.setOperator("eq");
-            con.setValue1(new Long(request.getParameter("hocVienID").toString()));
+            con.setCol("maMonHoc");
+            con.setOperator("like");
+            con.setValue1("%" + (String) request.getParameter("maMonHoc") + "%");
             cons.add(con);
         }
-        
+        if (request.getParameter("tenMonHoc") != null) {
+            MyFilter con = new MyFilter();
+            con.setCol("tenMonHoc");
+            con.setOperator("like");
+            con.setValue1("%" + (String) request.getParameter("tenMonHoc") + "%");
+            cons.add(con);
+        }
+        if (request.getParameter("tenGV") != null) {
+            MyFilter con = new MyFilter();
+            con.setCol("tenGV");
+            con.setOperator("like");
+            con.setValue1("%" + (String) request.getParameter("tenGV") + "%");
+            cons.add(con);
+        }
+        if (request.getParameter("monHocKemId") != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("monHocKemId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getParameter("monHocKemId").toString()));
+                cons.add(con);
+        }
         return cons;
     }
 }
