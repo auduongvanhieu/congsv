@@ -20,6 +20,7 @@ com\cce\vietnguyen\controller\Tbl_QLDT_BangDiemController.class
 com\cce\vietnguyen\controller\Tbl_qldt_ts_khoituyensinh_monhocController.class
 com\cce\vietnguyen\controller\Tbl_QLDT_TS_DM_GiayToController.class
 com\cce\vietnguyen\model\Tbl_QLDT_TKB_LopDuKien_KhoiNganh.class
+com\cce\vietnguyen\controller\View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDoController.class
 com\cce\vietnguyen\model\Tbl_QLDT_DM_TruongTHPT.class
 com\cce\vietnguyen\model\Tbl_QLDT_QLHV_QuyetDinhKhenThuong.class
 com\cce\vietnguyen\model\Tbl_QLDT_HocVien_PhieuDangKyMonHoc.class
@@ -260,6 +261,7 @@ com\cce\vietnguyen\model\Tbl_qldt_ts_dm_monhoc.class
 com\cce\vietnguyen\controller\Tbl_QLDT_QLHV_TaiKhoanController.class
 com\cce\vietnguyen\model\Tbl_QLDT_DKMH_HocVien_DangKy_MonHoc.class
 com\cce\vietnguyen\model\Tbl_QLDT_HP_HocVien_HocPhi_MonHoc.class
+com\cce\vietnguyen\model\View_QLDT_DKMH_HocVien_DangKy_LopMonHoc_TuDo.class
 com\cce\vietnguyen\model\Tbl_QLDT_CTDT_HeDaoTao.class
 com\cce\vietnguyen\controller\Tbl_QLDT_HocKyTrongNamController.class
 com\cce\vietnguyen\controller\Tbl_QLDT_RBXL_LopDuKien_CamController.class
