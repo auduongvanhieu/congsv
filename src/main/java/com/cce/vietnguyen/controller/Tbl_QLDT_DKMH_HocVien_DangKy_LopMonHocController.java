@@ -96,6 +96,16 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
         }
     }
     
+    @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteObj(@PathVariable Long id,
+             @AuthenticationPrincipal Tbl_TaiKhoan user) {
+        if (user == null || user.getId().equals(new Long(0))) {
+                return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
+        genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id);
+        return new ResponseEntity(id, HttpStatus.OK);
+    }
+    
     private List<MyFilter> buildFilter(HttpServletRequest request) {
         List<MyFilter> cons = new ArrayList<MyFilter>();
         //variable
