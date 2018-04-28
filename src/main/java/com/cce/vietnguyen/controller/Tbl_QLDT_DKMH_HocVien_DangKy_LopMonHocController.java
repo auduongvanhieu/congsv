@@ -92,7 +92,7 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             return new ResponseEntity(obj, HttpStatus.OK);
         } catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
-            return new ResponseEntity(HttpStatus.CONFLICT);
+            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
         }
     }
     
@@ -102,8 +102,13 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
         if (user == null || user.getId().equals(new Long(0))) {
                 return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         }
-        genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id);
-        return new ResponseEntity(id, HttpStatus.OK);
+        try{
+            genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id);
+            return new ResponseEntity(id, HttpStatus.OK);
+        }catch (DataIntegrityViolationException e) {
+            System.out.println("object already exist");
+            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
+        }
     }
     
     private List<MyFilter> buildFilter(HttpServletRequest request) {
