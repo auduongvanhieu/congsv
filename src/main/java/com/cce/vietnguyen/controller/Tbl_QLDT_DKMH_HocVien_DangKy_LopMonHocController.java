@@ -5,6 +5,8 @@
  */
 package com.cce.vietnguyen.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,8 @@ import com.cce.vietnguyen.model.core.Tbl_TaiKhoan;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.cce.vietnguyen.model.Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc;
-
+import com.cce.vietnguyen.util.Constants;
+import java.util.HashMap;
 @RestController
 public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
     
@@ -81,7 +84,7 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
     }
     
     @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc", method = RequestMethod.POST)
-    public ResponseEntity createObj(@RequestBody Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj,
+    public String createObj(@RequestBody Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj,
              @AuthenticationPrincipal Tbl_TaiKhoan user) {
 //        if (!genericRepository.checkRight(user, "tbl_qldt_dkmh_hocvien_dangky_lopmonhoc", "them")) {
 //        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
@@ -89,10 +92,15 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
         try {
             Long id = genericDAO.save(obj);
             obj.setId(id);
-            return new ResponseEntity(obj, HttpStatus.OK);
+            
+            HashMap<String,Object> result=new HashMap();
+            result.put(Constants.RESULT_FLAG, "true");
+            result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_SUCCESS);
+            
+            return (new JSONObject(result)).toString();
         } catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
-            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
+            return (new ResponseEntity(HttpStatus.EXPECTATION_FAILED)).toString();
         }
     }
     

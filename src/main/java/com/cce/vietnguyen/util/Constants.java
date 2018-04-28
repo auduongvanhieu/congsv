@@ -31,4 +31,15 @@ public class Constants {
 	/** The Constant EXIT. */
 	public static final String EXIT = "Exit";
 
+        /** The Constant RESULT_FLAG. */
+	public static final String RESULT_FLAG = "result_flag";
+        
+        /** The Constant RESULT_MESSAGE. */
+	public static final String RESULT_MESSAGE = "result_message";
+        
+        /** The Constant Register success. */
+	public static final String REGISTER_SUCCESS = "Đăng ký thành công";
+        
+        /** The Constant Register success. */
+	public static final String REGISTER_IS = "Lớp đã tồn tại trong danh sách đăng ký";
 }
