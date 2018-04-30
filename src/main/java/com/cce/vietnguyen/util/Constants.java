@@ -41,5 +41,8 @@ public class Constants {
 	public static final String REGISTER_SUCCESS = "Đăng ký thành công";
         
         /** The Constant Register success. */
-	public static final String REGISTER_IS = "Lớp đã tồn tại trong danh sách đăng ký";
+	public static final String REGISTER_ISEXIST = "Lớp đã tồn tại trong danh sách đăng ký";
+        
+        /** The Constant Register success. */
+	public static final String CLASS_ISFULL = "Lớp đã dầy";
 }

@@ -28,6 +28,7 @@ import com.cce.vietnguyen.model.core.Tbl_TaiKhoan;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.cce.vietnguyen.model.Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc;
+import com.cce.vietnguyen.model.Tbl_QLDT_TKB_LopMonHoc;
 import com.cce.vietnguyen.util.Constants;
 import java.util.HashMap;
 @RestController
@@ -90,13 +91,43 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
 //        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //        }
         try {
+            
+            HashMap<String,Object> result=new HashMap();
+            
+            //Kiểm tra tồn tại
+            List<MyFilter> cons = new ArrayList<MyFilter>();
+            cons = buildFilter(obj);
+            List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons, 20, 1);
+            if(dkmh.size()>0)
+            {
+                result.put(Constants.RESULT_FLAG, "false");
+                result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_ISEXIST);
+                return (new JSONObject(result)).toString();
+            }
+            
+            //Lấy lớp môn học
+            List<MyFilter> cons2 = new ArrayList<MyFilter>();
+            cons2 = buildFilterLopMonHoc(obj);
+            List<Tbl_QLDT_TKB_LopMonHoc> dkmh2= genericDAO.findByCondition(Tbl_QLDT_TKB_LopMonHoc.class, cons2, -1, 1);
+
+            //Kiểm tra sỉ số
+            List<MyFilter> cons3 = new ArrayList<MyFilter>();
+            cons3 = buildFilterLopMonHocDK(obj);
+            List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh3= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons3, -1, 1);
+            if(dkmh3.size()>=dkmh2.get(0).getSiSoMax())
+            {
+                result.put(Constants.RESULT_FLAG, "false");
+                result.put(Constants.RESULT_MESSAGE,Constants.CLASS_ISFULL);
+                return (new JSONObject(result)).toString();
+            }
+            
+            //Thực hiện insert
             Long id = genericDAO.save(obj);
             obj.setId(id);
             
-            HashMap<String,Object> result=new HashMap();
+            //Thoã mãn
             result.put(Constants.RESULT_FLAG, "true");
             result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_SUCCESS);
-            
             return (new JSONObject(result)).toString();
         } catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
@@ -141,4 +172,60 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             }
         return cons;
     }
+    
+    private List<MyFilter> buildFilter(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc request) {
+        List<MyFilter> cons = new ArrayList<MyFilter>();
+        if (request.getHocVienId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("hocVienId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getHocVienId().toString()));
+                cons.add(con);
+            }
+        if (request.getLopMonHocId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("lopMonHocId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getLopMonHocId().toString()));
+                cons.add(con);
+            }
+        if (request.getHocKyId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("hocKyId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getHocKyId().toString()));
+                cons.add(con);
+            }
+        return cons;
+    }
+    private List<MyFilter> buildFilterLopMonHocDK(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc request) {
+        List<MyFilter> cons = new ArrayList<MyFilter>();
+        if (request.getLopMonHocId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("lopMonHocId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getLopMonHocId().toString()));
+                cons.add(con);
+            }
+        if (request.getHocKyId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("hocKyId");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getHocKyId().toString()));
+                cons.add(con);
+            }
+        return cons;
+    }
+    private List<MyFilter> buildFilterLopMonHoc(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc request) {
+        List<MyFilter> cons = new ArrayList<MyFilter>();
+        if (request.getLopMonHocId() != null) {
+                MyFilter con = new MyFilter();
+                con.setCol("id");
+                con.setOperator("eq");
+                con.setValue1(new Long(request.getLopMonHocId().toString()));
+                cons.add(con);
+            }
+        return cons;
+    }
+    
 }
