@@ -143,7 +143,7 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
 //        }
            HashMap<String,Object> result=new HashMap();
             for (Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj : objs) {
-                try {
+            try {
 
                 //Kiểm tra tồn tại
                 List<MyFilter> cons = new ArrayList<MyFilter>();
