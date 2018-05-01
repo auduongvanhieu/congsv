@@ -135,6 +135,59 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
         }
     }
     
+    @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc/list", method = RequestMethod.POST)
+    public String createObj(@RequestBody List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> objs,
+             @AuthenticationPrincipal Tbl_TaiKhoan user) {
+//        if (!genericRepository.checkRight(user, "tbl_qldt_dkmh_hocvien_dangky_lopmonhoc", "them")) {
+//        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+//        }
+           HashMap<String,Object> result=new HashMap();
+            for (Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj : objs) {
+                try {
+
+                //Kiểm tra tồn tại
+                List<MyFilter> cons = new ArrayList<MyFilter>();
+                cons = buildFilter(obj);
+                List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons, 20, 1);
+                if(dkmh.size()>0)
+                {
+                    result.put(Constants.RESULT_FLAG, "false");
+                    result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_ISEXIST);
+                    return (new JSONObject(result)).toString();
+                }
+            
+            //Lấy lớp môn học
+            List<MyFilter> cons2 = new ArrayList<MyFilter>();
+            cons2 = buildFilterLopMonHoc(obj);
+            List<Tbl_QLDT_TKB_LopMonHoc> dkmh2= genericDAO.findByCondition(Tbl_QLDT_TKB_LopMonHoc.class, cons2, -1, 1);
+
+            //Kiểm tra sỉ số
+            List<MyFilter> cons3 = new ArrayList<MyFilter>();
+            cons3 = buildFilterLopMonHocDK(obj);
+            List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh3= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons3, -1, 1);
+            if(dkmh3.size()>=dkmh2.get(0).getSiSoMax())
+            {
+                result.put(Constants.RESULT_FLAG, "false");
+                result.put(Constants.RESULT_MESSAGE,Constants.CLASS_ISFULL);
+                return (new JSONObject(result)).toString();
+            }
+            
+            //Thực hiện insert
+            Long id = genericDAO.save(obj);
+            obj.setId(id);
+            
+            //Thoã mãn
+            result.put(Constants.RESULT_FLAG, "true");
+            result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_SUCCESS);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println("object already exist");
+            return (new ResponseEntity(HttpStatus.EXPECTATION_FAILED)).toString();
+        }
+      }
+        return (new JSONObject(result)).toString();
+    }
+    
+    
     @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteObj(@PathVariable Long id,
              @AuthenticationPrincipal Tbl_TaiKhoan user) {
