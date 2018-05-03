@@ -142,9 +142,8 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
 //        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 //        }
            HashMap<String,Object> result=new HashMap();
+           
             for (Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj : objs) {
-            try {
-
                 //Kiểm tra tồn tại
                 List<MyFilter> cons = new ArrayList<MyFilter>();
                 cons = buildFilter(obj);
@@ -154,53 +153,81 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
                     result.put(Constants.RESULT_FLAG, "false");
                     result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_ISEXIST);
                     return (new JSONObject(result)).toString();
-                }
-            
-            //Lấy lớp môn học
-            List<MyFilter> cons2 = new ArrayList<MyFilter>();
-            cons2 = buildFilterLopMonHoc(obj);
-            List<Tbl_QLDT_TKB_LopMonHoc> dkmh2= genericDAO.findByCondition(Tbl_QLDT_TKB_LopMonHoc.class, cons2, -1, 1);
+                }        
+                //Lấy lớp môn học
+                List<MyFilter> cons2 = new ArrayList<MyFilter>();
+                cons2 = buildFilterLopMonHoc(obj);
+                List<Tbl_QLDT_TKB_LopMonHoc> dkmh2= genericDAO.findByCondition(Tbl_QLDT_TKB_LopMonHoc.class, cons2, -1, 1);
 
-            //Kiểm tra sỉ số
-            List<MyFilter> cons3 = new ArrayList<MyFilter>();
-            cons3 = buildFilterLopMonHocDK(obj);
-            List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh3= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons3, -1, 1);
-            if(dkmh3.size()>=dkmh2.get(0).getSiSoMax())
-            {
-                result.put(Constants.RESULT_FLAG, "false");
-                result.put(Constants.RESULT_MESSAGE,Constants.CLASS_ISFULL);
-                return (new JSONObject(result)).toString();
+                //Kiểm tra sỉ số
+                List<MyFilter> cons3 = new ArrayList<MyFilter>();
+                cons3 = buildFilterLopMonHocDK(obj);
+                List<Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc> dkmh3= genericDAO.findByCondition(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, cons3, -1, 1);
+                if(dkmh3.size()>=dkmh2.get(0).getSiSoMax())
+                {
+                    result.put(Constants.RESULT_FLAG, "false");
+                    result.put(Constants.RESULT_MESSAGE,Constants.CLASS_ISFULL);
+                    return (new JSONObject(result)).toString();
+                }
             }
-            
+        for (Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc obj : objs) {
             //Thực hiện insert
+            try {
             Long id = genericDAO.save(obj);
             obj.setId(id);
-            
-            //Thoã mãn
-            result.put(Constants.RESULT_FLAG, "true");
-            result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_SUCCESS);
-        } catch (DataIntegrityViolationException e) {
+            } catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
             return (new ResponseEntity(HttpStatus.EXPECTATION_FAILED)).toString();
         }
-      }
+        }
+        //Thoã mãn
+        result.put(Constants.RESULT_FLAG, "true");
+        result.put(Constants.RESULT_MESSAGE,Constants.REGISTER_SUCCESS);
         return (new JSONObject(result)).toString();
     }
     
     
     @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteObj(@PathVariable Long id,
+    public String deleteObj(@PathVariable Long id,
              @AuthenticationPrincipal Tbl_TaiKhoan user) {
         if (user == null || user.getId().equals(new Long(0))) {
-                return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE).toString();
         }
         try{
             genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id);
-            return new ResponseEntity(id, HttpStatus.OK);
+            HashMap<String,Object> result=new HashMap();
+            //Thoã mãn
+            result.put(Constants.RESULT_FLAG, "true");
+            result.put(Constants.RESULT_MESSAGE,Constants.DELETE_SUCCESS);
+            return (new JSONObject(result)).toString();
         }catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
-            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED).toString();
         }
+    }
+    
+    @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc", method = RequestMethod.DELETE)
+    public String deleteObj(@RequestParam(required = false) Long id1,@RequestParam(required = false) Long id2,
+             @AuthenticationPrincipal Tbl_TaiKhoan user) {
+        
+        if (user == null || user.getId().equals(new Long(0))) {
+                return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE).toString();
+        }
+        try{
+            if(id1 != null)
+                genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id1);
+            if(id2 != null)
+                genericDAO.delete(Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc.class, id2);
+        }catch (DataIntegrityViolationException e) {
+            System.out.println("object already exist");
+            return new ResponseEntity(HttpStatus.EXPECTATION_FAILED).toString();
+        }
+        
+        HashMap<String,Object> result=new HashMap();
+        //Thoã mãn
+        result.put(Constants.RESULT_FLAG, "true");
+        result.put(Constants.RESULT_MESSAGE,Constants.DELETE_SUCCESS);
+        return (new JSONObject(result)).toString();
     }
     
     private List<MyFilter> buildFilter(HttpServletRequest request) {

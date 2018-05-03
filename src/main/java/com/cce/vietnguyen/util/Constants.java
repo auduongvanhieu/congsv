@@ -45,4 +45,7 @@ public class Constants {
         
         /** The Constant Register success. */
 	public static final String CLASS_ISFULL = "Lớp đã dầy";
+        
+        /** The Constant Register success. */
+	public static final String DELETE_SUCCESS = "Xoá thành công";
 }
