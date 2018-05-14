@@ -175,6 +175,8 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             try {
             Long id = genericDAO.save(obj);
             obj.setId(id);
+            obj.setKetQuaDK("Đăng ký thành công!");
+            obj.setKetQuaXuLy("Đăng ký thành công");
             } catch (DataIntegrityViolationException e) {
             System.out.println("object already exist");
             return (new ResponseEntity(HttpStatus.EXPECTATION_FAILED)).toString();
