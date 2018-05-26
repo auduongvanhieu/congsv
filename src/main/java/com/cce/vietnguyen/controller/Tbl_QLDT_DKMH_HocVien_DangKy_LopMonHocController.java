@@ -6,6 +6,8 @@
 package com.cce.vietnguyen.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,10 @@ import com.cce.vietnguyen.model.Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc;
 import com.cce.vietnguyen.model.Tbl_QLDT_TKB_LopMonHoc;
 import com.cce.vietnguyen.util.Constants;
 import java.util.HashMap;
+import com.cce.vietnguyen.model.Tbl_QLDT_CTDT_HeDaoTao;
+import com.cce.vietnguyen.model.Tbl_QLDT_HocKyTrongNam;
+import com.cce.vietnguyen.model.Tbl_QLDT_CTDT_KhoiNganh;
+
 @RestController
 public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
     
@@ -39,6 +45,73 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
     @Autowired
     private GenericRepository genericRepository;
     
+    
+    @RequestMapping(value = "/tbl_qldt_dkmh_loadcombobox", method = RequestMethod.GET)
+    public String getObj()
+    {
+        List<MyFilter> cons = new ArrayList<MyFilter>();
+        {
+            MyFilter con = new MyFilter();
+            con.setOperator("order");
+            con.setValue1("desc");
+            con.setCol("id");
+            cons.add(con);
+        }
+        
+        ThongTinComboBox box=new ThongTinComboBox();
+        //Load danh sách học kỳ
+        List<Tbl_QLDT_HocKyTrongNam> hocKys= genericDAO.findByCondition(Tbl_QLDT_HocKyTrongNam.class, cons, 1000, 1);
+        box.setHocKys(hocKys);
+        
+        //Load danh sách Hệ đào tạo
+        List<Tbl_QLDT_CTDT_HeDaoTao> heDaoTaos= genericDAO.findByCondition(Tbl_QLDT_CTDT_HeDaoTao.class, cons, 1000, 1);
+        box.setHeDaoTaos(heDaoTaos);
+        
+        //Load danh sách khối ngành
+        List<Tbl_QLDT_CTDT_KhoiNganh> khoiNganhs= genericDAO.findByCondition(Tbl_QLDT_CTDT_KhoiNganh.class, cons, 1000, 1);
+        box.setKhoiNganhs(khoiNganhs);
+        
+        ObjectMapper mapper = new ObjectMapper();
+        String json="";
+        try {
+            json = mapper.writeValueAsString(box);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+   class ThongTinComboBox
+   {
+       List<Tbl_QLDT_HocKyTrongNam> hocKys;
+       List<Tbl_QLDT_CTDT_HeDaoTao> heDaoTaos;
+       List<Tbl_QLDT_CTDT_KhoiNganh> khoiNganhs;
+
+        public List<Tbl_QLDT_HocKyTrongNam> getHocKys() {
+            return hocKys;
+        }
+
+        public void setHocKys(List<Tbl_QLDT_HocKyTrongNam> hocKys) {
+            this.hocKys = hocKys;
+        }
+       
+        public List<Tbl_QLDT_CTDT_HeDaoTao> getHeDaoTaos() {
+            return heDaoTaos;
+        }
+
+        public void setHeDaoTaos(List<Tbl_QLDT_CTDT_HeDaoTao> heDaoTaos) {
+            this.heDaoTaos = heDaoTaos;
+        } 
+
+        public List<Tbl_QLDT_CTDT_KhoiNganh> getKhoiNganhs() {
+            return khoiNganhs;
+        }
+
+        public void setKhoiNganhs(List<Tbl_QLDT_CTDT_KhoiNganh> khoiNganhs) {
+            this.khoiNganhs = khoiNganhs;
+        }
+        
+        
+   }
     
     @RequestMapping(value = "/tbl_qldt_dkmh_hocvien_dangky_lopmonhoc", method = RequestMethod.GET)
     public List getAll() {
@@ -309,5 +382,5 @@ public class Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHocController {
             }
         return cons;
     }
-    
+
 }
