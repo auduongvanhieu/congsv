@@ -1,6 +1,8 @@
 
 package com.cce.vietnguyen.controller.core;
 
+import com.alibaba.fastjson.JSONObject;
+import com.cce.vietnguyen.model.Tbl_QLDT_DKMH_HocVien_DangKy_LopMonHoc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ import com.cce.vietnguyen.model.core.Tbl_TaiKhoan;
 
 import com.cce.vietnguyen.model.core.Tbl_CanBo;
 import com.cce.vietnguyen.model.core.Tbl_NhomQuyen;
+import com.cce.vietnguyen.util.Constants;
+import java.util.HashMap;
 
 /*
 * Controller Template: Template/Server/ControllerTemplate.java
@@ -208,5 +212,63 @@ public class Tbl_TaiKhoanController {
 
 		return cons;
 	}
-	// việt
+        //Create by Hieu
+        @RequestMapping(value = "/tbl_taikhoan_doimatkhau", method = RequestMethod.PUT)
+	public String updateObjDoiMatKhau(@RequestBody List<Tbl_TaiKhoan> objs, @AuthenticationPrincipal Tbl_TaiKhoan user) {
+//		if (!genericRepository.checkRight(user, "tbl_taikhoan", "sua")) {
+//			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE).toString();
+//		}
+           HashMap<String,Object> result=new HashMap();
+           
+            try {
+                
+                List<MyFilter> cons = new ArrayList<MyFilter>();
+                cons = buildFilterTaiKhoan(objs.get(0));
+                List<Tbl_TaiKhoan> obj_orgins= genericDAO.findByCondition(Tbl_TaiKhoan.class, cons, 20, 1);
+                
+                if(encoder.matches(objs.get(0).getPassword(), obj_orgins.get(0).getPassword()))
+                {
+                    Tbl_TaiKhoan obj=obj_orgins.get(0);
+                    obj.setPassword(encoder.encode(objs.get(1).getPassword()));
+                    genericDAO.saveOrUpdate(obj);
+
+                    //Báo kết quả thành công
+                    result.put(Constants.RESULT_FLAG, "false");
+                    result.put(Constants.RESULT_MESSAGE,Constants.UPDATE_PASSWORD_SUCCESS);
+                    return (new JSONObject(result)).toString();
+                }
+                else
+                {
+                     //Báo sai mật khẩu cũ
+                    result.put(Constants.RESULT_FLAG, "false");
+                    result.put(Constants.RESULT_MESSAGE,Constants.FAIL_OLD_PASSWORD);
+                    return (new JSONObject(result)).toString();
+                }
+
+                
+            } catch (DataIntegrityViolationException e) {
+                //Báo lỗi
+                result.put(Constants.RESULT_FLAG, "false");
+                result.put(Constants.RESULT_MESSAGE,Constants.EXCEPTION);
+                return (new JSONObject(result)).toString();
+            }
+	}
+        private List<MyFilter> buildFilterTaiKhoan(Tbl_TaiKhoan request) {
+        List<MyFilter> cons = new ArrayList<MyFilter>();
+        if (request.getLogin()!= null) {
+                MyFilter con = new MyFilter();
+                con.setCol("login");
+                con.setOperator("eq");
+                con.setValue1( request.getLogin());
+                cons.add(con);
+            }
+//        if (request.getPassword() != null) {
+//                MyFilter con = new MyFilter();
+//                con.setCol("password");
+//                con.setOperator("eq");
+//                con.setValue1(request.getPassword());
+//                cons.add(con);
+//            }
+        return cons;
+    }
 }

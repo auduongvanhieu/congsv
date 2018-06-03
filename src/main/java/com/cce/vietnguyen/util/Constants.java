@@ -48,4 +48,13 @@ public class Constants {
         
         /** The Constant Register success. */
 	public static final String DELETE_SUCCESS = "Xoá thành công";
+        
+        /** The Constant Register success. */
+	public static final String EXCEPTION = "Đã xảy ra ngoại lệ";
+        
+        /** The Constant Register success. */
+	public static final String UPDATE_PASSWORD_SUCCESS = "Đổi mật khẩu thành công";
+        
+        /** The Constant Register success. */
+	public static final String FAIL_OLD_PASSWORD= "Mật khẩu cũ không đúng";
 }
